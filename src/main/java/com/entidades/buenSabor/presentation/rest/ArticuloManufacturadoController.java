@@ -18,4 +18,10 @@ public class ArticuloManufacturadoController extends BaseControllerImp<ArticuloM
     public ResponseEntity<?> findBySucursales(@PathVariable("idSucursal") Long idSucursal) {
         return ResponseEntity.ok(facade.findBySucursales(idSucursal));
     }
+
+    @GetMapping("/paraVenta")
+    public ResponseEntity<?> manufacturadosParaVenta() {
+        return ResponseEntity.ok(facade.manufacturadosParaVenta());
+    }
+
 }

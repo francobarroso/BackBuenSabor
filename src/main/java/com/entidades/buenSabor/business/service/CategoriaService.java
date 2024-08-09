@@ -10,4 +10,6 @@ public interface CategoriaService extends BaseService<Categoria, Long> {
     void deleteInSucursales(Long idCategoria, Long idSucursal);
 
     List<Categoria> findByEmpresa(Long idEmpresa);
+
+    List<Categoria> findByEcommerce();
 }

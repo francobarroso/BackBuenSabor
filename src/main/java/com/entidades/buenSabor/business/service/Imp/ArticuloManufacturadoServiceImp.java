@@ -257,4 +257,9 @@ public class ArticuloManufacturadoServiceImp extends BaseServiceImp<ArticuloManu
     public List<ArticuloManufacturado> findBySucursales(Long idSucursal) {
         return this.articuloManufacturadoRepository.findBySucursales(idSucursal);
     }
+
+    @Override
+    public List<ArticuloManufacturado> manufacturadosParaVenta() {
+        return this.articuloManufacturadoRepository.findArticuloManufacturadosByHabilitadoIsTrue();
+    }
 }

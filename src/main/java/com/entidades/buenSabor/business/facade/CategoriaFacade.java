@@ -9,4 +9,6 @@ import java.util.List;
 
 public interface CategoriaFacade extends BaseFacade<CategoriaDto, CategoriaGetDto, Long> {
     List<CategoriaGetDto> findByEmpresa(Long idEmpresa);
+
+    List<CategoriaGetDto> findByEcommerce();
 }

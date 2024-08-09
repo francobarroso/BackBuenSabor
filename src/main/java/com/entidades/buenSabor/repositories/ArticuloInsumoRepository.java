@@ -11,7 +11,6 @@ import java.util.List;
 
 @Repository
 public interface ArticuloInsumoRepository extends BaseRepository<ArticuloInsumo,Long> {
-    List<ArticuloInsumo> getByCategoria(Categoria categoria);
     @Query("SELECT ai FROM ArticuloInsumo ai " +
             "JOIN ai.categoria c " +
             "JOIN c.sucursales s " +
@@ -21,5 +20,7 @@ public interface ArticuloInsumoRepository extends BaseRepository<ArticuloInsumo,
 
     @Query("SELECT ai FROM ArticuloInsumo ai JOIN ai.categoria c JOIN c.sucursales s WHERE ai.esParaElaborar = false AND s.id = :idSucursal")
     List<ArticuloInsumo> findAllArticuloInsumosWithEsParaElaborarFalse(@Param("idSucursal") Long idSucursal);
+
+    List<ArticuloInsumo> findByEsParaElaborarIsFalseAndHabilitadoIsTrue();
 
 }

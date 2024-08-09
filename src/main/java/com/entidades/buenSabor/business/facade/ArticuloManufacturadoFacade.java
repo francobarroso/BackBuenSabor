@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface ArticuloManufacturadoFacade extends BaseFacade<ArticuloManufacturadoDto, ArticuloManufacturadoDto, Long> {
     List<ArticuloManufacturadoDto> findBySucursales(Long idSucursal);
+    List<ArticuloManufacturadoDto> manufacturadosParaVenta();
 }

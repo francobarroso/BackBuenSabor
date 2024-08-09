@@ -28,4 +28,9 @@ public class ArticuloManufacturadoFacadeImp extends BaseFacadeImp<ArticuloManufa
     public List<ArticuloManufacturadoDto> findBySucursales(Long idSucursal) {
         return this.articuloManufacturadoMapper.toDTOsList(this.articuloManufacturadoService.findBySucursales(idSucursal));
     }
+
+    @Override
+    public List<ArticuloManufacturadoDto> manufacturadosParaVenta() {
+        return this.articuloManufacturadoMapper.toDTOsList(this.articuloManufacturadoService.manufacturadosParaVenta());
+    }
 }

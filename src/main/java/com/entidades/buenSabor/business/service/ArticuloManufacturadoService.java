@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface ArticuloManufacturadoService extends BaseService<ArticuloManufacturado, Long> {
     List<ArticuloManufacturado> findBySucursales(Long idSucursal);
+    List<ArticuloManufacturado> manufacturadosParaVenta();
 }

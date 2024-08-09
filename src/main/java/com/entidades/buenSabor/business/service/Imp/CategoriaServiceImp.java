@@ -11,10 +11,7 @@ import com.entidades.buenSabor.repositories.SucursalRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 import static org.hibernate.query.sqm.tree.SqmNode.log;
 
@@ -181,6 +178,14 @@ public class CategoriaServiceImp extends BaseServiceImp<Categoria, Long> impleme
     @Override
     public List<Categoria> findByEmpresa(Long idEmpresa) {
         return this.categoriaRepository.findAllBySucursalId(idEmpresa);
+    }
+
+    @Override
+    public List<Categoria> findByEcommerce() {
+        List<Categoria> result = new ArrayList<>();
+        result.addAll(this.categoriaRepository.findCategoriaInsumos());
+        result.addAll(this.categoriaRepository.findCategoriaManufacturados());
+        return result;
     }
 
 

@@ -227,4 +227,9 @@ public class ArticuloInsumoServiceImp extends BaseServiceImp<ArticuloInsumo,Long
     public List<ArticuloInsumo> paraVenta(Long idSucursal) {
         return this.articuloInsumoRepository.findAllArticuloInsumosWithEsParaElaborarFalse(idSucursal);
     }
+
+    @Override
+    public List<ArticuloInsumo> insumoParaVentaEcommerce() {
+        return this.articuloInsumoRepository.findByEsParaElaborarIsFalseAndHabilitadoIsTrue();
+    }
 }

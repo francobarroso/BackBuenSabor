@@ -10,4 +10,5 @@ import java.util.List;
 public interface ArticuloInsumoFacade extends BaseFacade<ArticuloInsumoDto, ArticuloInsumoDto, Long> {
     List<ArticuloInsumoDto> findBySucursales(Long idSucursal);
     List<ArticuloInsumoDto> paraVenta(Long idSucursal);
+    List<ArticuloInsumoDto> insumoParaVentaEcommerce();
 }
