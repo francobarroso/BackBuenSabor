@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.awt.*;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.List;
 
@@ -229,5 +230,11 @@ public class PromocionServiceImp extends BaseServiceImp<Promocion, Long> impleme
     @Override
     public List<Promocion> findBySucursal(Long idSucursal) {
         return this.promocionRepository.findAllWithSucursales(idSucursal);
+    }
+
+    @Override
+    public List<Promocion> findByEcommerce() {
+        LocalDate fechaActual = LocalDate.now();
+        return this.promocionRepository.findByHabilitadoTrueAndFechaHastaGreaterThanEqual(fechaActual);
     }
 }

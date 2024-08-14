@@ -19,4 +19,9 @@ public class PromocionController extends BaseControllerImp<Promocion, PromocionD
     public ResponseEntity<?> findBySucursal(@PathVariable("idSucursal") Long idSucursal){
         return ResponseEntity.ok(facade.findBySucursal(idSucursal));
     }
+
+    @GetMapping("/findByEcommerce")
+    public ResponseEntity<?> findByEcommerce(){
+        return ResponseEntity.ok(facade.findByEcommerce());
+    }
 }
