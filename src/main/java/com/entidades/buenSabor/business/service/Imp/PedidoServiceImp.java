@@ -118,55 +118,9 @@ public class PedidoServiceImp extends BaseServiceImp<Pedido,Long> implements Ped
         return super.create(pedido);
     }
 
+    @Override
     public Pedido create(PedidoDto pedido) {
-        var sucursal = sucursalRepository.getById(pedido.getSucursalId());
-        var cliente = clienteRepository.getById(pedido.getClienteId());
-        var empleado = empleadoRepository.getById(pedido.getEmpleadoId());
-
-        Pedido.PedidoBuilder<?, ?> pedidoEntidad = Pedido.builder();
-
-        Domicilio domicilio = Domicilio.builder()
-                .calle(pedido.getDomicilio().getCalle())
-                .numero(pedido.getDomicilio().getNumero())
-                .cp(pedido.getDomicilio().getCp())
-                .piso(pedido.getDomicilio().getPiso())
-                .nroDpto(pedido.getDomicilio().getNroDpto())
-                //.localidad(localidadRepository.getById(pedido.getDomicilio().getLocalidadId()))
-                .build();
-
-        Set<DetallePedido> detallePedidos = new HashSet<>();
-        Set<Articulo> articulos = new HashSet<>();
-        Double total = 0.;
-
-        for(DetallePedido detalle: pedido.getDetallePedidos()){
-            DetallePedido detallePedido = detalle;
-            Articulo articulo = this.articuloRepository.findById(detalle.getArticulo().getId())
-                    .orElseThrow(() -> new RuntimeException("El articulo id: " + detalle.getArticulo().getId() + " no existe."));
-            detallePedido.setArticulo(articulo);
-            detallePedido.setSubTotal(detalle.getCantidad() * articulo.getPrecioVenta());
-            detallePedidos.add(detallePedido);
-
-            //Calcular el total del pedido
-            total += detallePedido.getSubTotal();
-
-            //Añadir articulos
-            articulos.add(articulo);
-        }
-
-        pedidoEntidad.tipoEnvio( pedido.getTipoEnvio() );
-        pedidoEntidad.formaPago( pedido.getFormaPago() );
-        pedidoEntidad.domicilio(domicilio);
-        pedidoEntidad.detallePedidos(pedido.getDetallePedidos());
-        pedidoEntidad.sucursal(sucursal);
-        pedidoEntidad.cliente(cliente);
-        pedidoEntidad.empleado(empleado);
-        pedidoEntidad.estado(pedido.getEstado());
-        pedidoEntidad.total(total);
-        pedidoEntidad.totalCosto(totalCosto(detallePedidos));
-        pedidoEntidad.horaEstimadaFinalizacion(horaEstimada(articulos));
-        pedidoEntidad.fechaPedido(LocalDate.now());
-
-        return super.create(pedidoEntidad.build());
+        return null;
     }
 
     public List<PedidoShortDto> getByRol(Rol rol, long sucursalId){

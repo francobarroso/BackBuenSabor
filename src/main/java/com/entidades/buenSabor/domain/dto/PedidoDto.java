@@ -17,13 +17,14 @@ import java.util.Set;
 @Getter
 @Setter
 public class PedidoDto extends BaseDto{
+    private Double total;
     private Estado estado;
     private TipoEnvio tipoEnvio;
     private FormaPago formaPago;
 
     private DomicilioDto domicilio;
 
-    private Long sucursalId;
+    private SucursalDto sucursal;
 
     private Long clienteId;
 
