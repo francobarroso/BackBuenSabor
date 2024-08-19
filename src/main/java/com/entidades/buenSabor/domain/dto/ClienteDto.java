@@ -5,10 +5,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-/*@NoArgsConstructor
+import java.util.Set;
+
+@NoArgsConstructor
 @AllArgsConstructor
 @Getter
-@Setter*/
+@Setter
 public class ClienteDto extends PersonaDto{
-
+private Set<DomicilioDto> domicilios;
 }

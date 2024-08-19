@@ -16,7 +16,6 @@ import org.hibernate.envers.Audited;
 //@Audited
 public class Usuario  extends Base{
     private String auth0Id;
-    private String userName;
     private String email;
     private Rol rol;
 }

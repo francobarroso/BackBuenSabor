@@ -11,7 +11,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class UsuarioDto extends BaseDto{
-    private String userName;
+    private String auth0Id;
     private String email;
     private Rol rol;
 }
