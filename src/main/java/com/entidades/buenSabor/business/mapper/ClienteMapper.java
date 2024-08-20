@@ -7,7 +7,7 @@ import org.mapstruct.Mapper;
 import java.util.List;
 
 @Mapper(componentModel = "spring")
-public interface ClietenMapper extends BaseMapper<Cliente, ClienteDto, ClienteDto>{
+public interface ClienteMapper extends BaseMapper<Cliente, ClienteDto, ClienteDto>{
     ClienteDto toDTO(Cliente source);
 
     List<ClienteDto> toDTOsList(List<Cliente> source);

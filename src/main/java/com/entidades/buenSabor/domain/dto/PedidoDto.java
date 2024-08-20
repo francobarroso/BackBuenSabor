@@ -1,5 +1,6 @@
 package com.entidades.buenSabor.domain.dto;
 
+import com.entidades.buenSabor.domain.entities.Cliente;
 import com.entidades.buenSabor.domain.entities.DetallePedido;
 import com.entidades.buenSabor.domain.enums.Estado;
 import com.entidades.buenSabor.domain.enums.FormaPago;
@@ -26,9 +27,9 @@ public class PedidoDto extends BaseDto{
 
     private SucursalDto sucursal;
 
-    private Long clienteId;
+    private ClienteDto cliente;
 
     private Set<DetallePedido> detallePedidos = new HashSet<>();
 
-    private Long empleadoId;
+    private EmpleadoDto empleado;
 }

@@ -5,6 +5,7 @@ import com.entidades.buenSabor.business.service.ClienteService;
 import com.entidades.buenSabor.domain.entities.Cliente;
 import com.entidades.buenSabor.domain.entities.Domicilio;
 import com.entidades.buenSabor.domain.entities.Localidad;
+import com.entidades.buenSabor.repositories.ClienteRepository;
 import com.entidades.buenSabor.repositories.LocalidadRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,8 @@ import java.util.Set;
 public class ClienteServiceImp extends BaseServiceImp<Cliente, Long> implements ClienteService {
     @Autowired
     private LocalidadRepository localidadRepository;
+    @Autowired
+    private ClienteRepository clienteRepository;
 
     @Override
     public Cliente create(Cliente cliente) {
@@ -32,5 +35,10 @@ public class ClienteServiceImp extends BaseServiceImp<Cliente, Long> implements 
         cliente.setDomicilios(domicilios);
 
         return super.create(cliente);
+    }
+
+    @Override
+    public Cliente findByEmail(String email) {
+        return this.clienteRepository.findByUsuarioEmail(email);
     }
 }
