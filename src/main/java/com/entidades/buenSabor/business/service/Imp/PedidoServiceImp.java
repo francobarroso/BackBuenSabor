@@ -141,6 +141,11 @@ public class PedidoServiceImp extends BaseServiceImp<Pedido,Long> implements Ped
         }
     }
 
+    @Override
+    public List<Pedido> findBySucursal(Long idSucursal) {
+        return this.pedidoRepository.findBySucursalId(idSucursal);
+    }
+
     public Double totalCosto(Set<DetallePedido> detallePedidos){
         Double totalCosto = 0.;
 

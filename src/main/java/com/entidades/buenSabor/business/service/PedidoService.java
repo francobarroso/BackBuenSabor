@@ -7,10 +7,13 @@ import com.entidades.buenSabor.domain.entities.Pedido;
 import com.entidades.buenSabor.domain.enums.Rol;
 
 import java.util.List;
+import java.util.Set;
 
 public interface PedidoService extends BaseService<Pedido, Long> {
 
     Pedido create(PedidoDto pedido);
 
     List<PedidoShortDto> getByRol(Rol rol, long sucursalId);
+
+    List<Pedido> findBySucursal(Long idSucursal);
 }

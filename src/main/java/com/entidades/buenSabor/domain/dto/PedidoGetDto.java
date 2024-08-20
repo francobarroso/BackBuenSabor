@@ -29,7 +29,7 @@ public class PedidoGetDto extends BaseDto{
     @Schema(type = "string", format = "date", pattern = "yyyy-MM-dd")
     private LocalDate fechaPedido;
     private DomicilioDto domicilio;
-    private SucursalShortDto sucursal;
+    private SucursalDto sucursal;
     private ClienteDto cliente;
     private Set<PedidoDetalleDto> detallePedidos = new HashSet<>();
     private EmpleadoDto empleado;

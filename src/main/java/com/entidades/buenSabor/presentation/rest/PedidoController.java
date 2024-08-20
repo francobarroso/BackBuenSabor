@@ -29,4 +29,9 @@ public class PedidoController extends BaseControllerImp<Pedido, PedidoDto, Pedid
     public ResponseEntity<List<PedidoShortDto>> getByPedidoId(@PathVariable Rol rol, @PathVariable long sucursalId) {
         return ResponseEntity.ok(facade.getByRol(rol, sucursalId));
     }
+
+    @GetMapping("/findBySucursal/{idSucursal}")
+    public ResponseEntity<?> findBySucursal(@PathVariable("idSucursal") Long idSucursal){
+        return ResponseEntity.ok(facade.findBySucursal(idSucursal));
+    }
 }
