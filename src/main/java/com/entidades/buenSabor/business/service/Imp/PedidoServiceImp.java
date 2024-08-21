@@ -20,9 +20,11 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.time.Month;
+import java.time.format.DateTimeFormatter;
+import java.time.format.TextStyle;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class PedidoServiceImp extends BaseServiceImp<Pedido,Long> implements PedidoService {
@@ -144,6 +146,83 @@ public class PedidoServiceImp extends BaseServiceImp<Pedido,Long> implements Ped
     @Override
     public List<Pedido> findBySucursal(Long idSucursal) {
         return this.pedidoRepository.findBySucursalId(idSucursal);
+    }
+
+    @Override
+    public List<Object[]> getGananciaByFecha(LocalDate startDate, LocalDate endDate) {
+        List<Pedido> pedidos = pedidoRepository.findPedidoByDate(startDate, endDate);
+
+        // Verificar si las fechas están en el mismo mes y año
+        boolean sameMonth = startDate.getYear() == endDate.getYear() && startDate.getMonth() == endDate.getMonth();
+
+        if(sameMonth){
+            Map<LocalDate, Double> totalesPorDia = pedidos.stream()
+                    .collect(Collectors.groupingBy(
+                            Pedido::getFechaPedido,
+                            Collectors.summingDouble(Pedido::getTotal)
+                    ));
+
+            // Crear la lista de resultados en el formato [dd-MM, total]
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM");
+            List<Object[]> resultado = new ArrayList<>();
+            for (Map.Entry<LocalDate, Double> entry : totalesPorDia.entrySet()) {
+                String fechaFormato = entry.getKey().format(formatter);
+                resultado.add(new Object[]{fechaFormato, entry.getValue()});
+            }
+            return resultado;
+        }else{
+            Map<Month, Double> totalesPorMes = pedidos.stream()
+                    .collect(Collectors.groupingBy(
+                            pedido -> pedido.getFechaPedido().getMonth(),
+                            Collectors.summingDouble(Pedido::getTotal)
+                    ));
+
+            // Crear la lista de resultados en el formato [Nombre del mes, total]
+            List<Object[]> resultado = new ArrayList<>();
+            for (Month mes : totalesPorMes.keySet()) {
+                String nombreMes = mes.getDisplayName(TextStyle.FULL, new Locale("es", "ES"));
+                String nombreMesCapitalizado = nombreMes.substring(0, 1).toUpperCase() + nombreMes.substring(1).toLowerCase();
+                Double total = totalesPorMes.get(mes);
+                resultado.add(new Object[]{nombreMesCapitalizado, total});
+            }
+
+
+            return resultado;
+        }
+    }
+
+    @Override
+    public List<Object[]> getProductosByFecha(LocalDate startDate, LocalDate endDate) {
+        List<Pedido> pedidos = pedidoRepository.findPedidoByDate(startDate, endDate);
+        Map<String, Integer> articuloVentas = new HashMap<>();
+
+        // Verificar si las fechas están en el mismo mes y año
+        boolean sameMonth = startDate.getYear() == endDate.getYear() && startDate.getMonth() == endDate.getMonth();
+
+        // Contar la cantidad de ventas para cada artículo
+        for (Pedido pedido : pedidos) {
+            for(DetallePedido detalle : pedido.getDetallePedidos()) {
+                if(detalle.getArticulo() != null){
+                    String nombreArticulo = detalle.getArticulo().getDenominacion();// Asumiendo que puedes acceder al nombre del artículo así
+                    articuloVentas.put(nombreArticulo, articuloVentas.getOrDefault(nombreArticulo, 0) + detalle.getCantidad());
+                }
+            }
+        }
+
+        // Ordenar los artículos por cantidad de ventas en orden descendente y obtener los 10 primeros
+        List<Map.Entry<String, Integer>> topArticulos = articuloVentas.entrySet()
+                .stream()
+                .sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
+                .limit(10)
+                .collect(Collectors.toList());
+
+        // Formatear el resultado en el formato deseado
+        List<Object[]> resultado = new ArrayList<>();
+        for (Map.Entry<String, Integer> entry : topArticulos) {
+            resultado.add(new Object[]{entry.getKey(), entry.getValue()});
+        }
+
+        return resultado;
     }
 
     public Double totalCosto(Set<DetallePedido> detallePedidos){
