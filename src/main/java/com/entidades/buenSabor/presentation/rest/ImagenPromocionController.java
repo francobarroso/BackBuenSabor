@@ -6,6 +6,7 @@ import com.entidades.buenSabor.domain.entities.ImagenArticulo;
 import com.entidades.buenSabor.domain.entities.ImagenPromocion;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -20,6 +21,7 @@ public class ImagenPromocionController {
     private ImagenPromocionService imagenPromocionService;
 
     @PostMapping("/upload")
+    @PreAuthorize("hasAnyAuthority('superadmin','administrador')")
     public List<ImagenPromocion> uploadImages(
             @RequestParam(value = "uploads", required = true) MultipartFile[] files) {
         try {
@@ -31,6 +33,7 @@ public class ImagenPromocionController {
     }
 
     @PostMapping("/deleteImg")
+    @PreAuthorize("hasAnyAuthority('superadmin','administrador')")
     public ResponseEntity<String> deleteById(@RequestParam("publicId") String publicId, @RequestParam("id") String id) {
         try {
             return this.imagenPromocionService.deleteImage(publicId, id);

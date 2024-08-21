@@ -46,7 +46,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
                                 .requestMatchers("/**").permitAll()
-                                .requestMatchers("/categoria/findByEcommerce").permitAll()
+//                                .requestMatchers("/categoria/findByEcommerce").permitAll()
 //                                .requestMatchers("/api/admin/**").hasAuthority("administrador")
 //                                .requestMatchers("/api/client/**").hasAuthority("cliente")
 //                                .anyRequest().authenticated()

@@ -6,6 +6,7 @@ import com.entidades.buenSabor.domain.dto.ArticuloInsumoDto;
 import com.entidades.buenSabor.domain.entities.ArticuloInsumo;
 import com.entidades.buenSabor.presentation.rest.Base.BaseControllerImp;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,6 +20,7 @@ public class ArticuloInsumoController extends BaseControllerImp<ArticuloInsumo, 
     }
 
     @GetMapping("/findBySucursal/{idSucursal}")
+    @PreAuthorize("hasAnyAuthority('superadmin','administrador', 'cajero')")
     public ResponseEntity<?> findBySucursales(@PathVariable("idSucursal") Long idSucursal) {
         return ResponseEntity.ok(facade.findBySucursales(idSucursal));
     }
