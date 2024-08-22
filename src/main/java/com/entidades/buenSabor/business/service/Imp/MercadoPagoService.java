@@ -31,13 +31,13 @@ public class MercadoPagoService {
 
         try {
             // Configuración del Access Token
-            MercadoPagoConfig.setAccessToken("TEST-6868831087152965-060612-f20879d73b51d173129c43f57c44c205-1844671669");
+            MercadoPagoConfig.setAccessToken("APP_USR-6868831087152965-060612-d9acf8e76d3b35850e81882d8b6ff7a0-1844671669");
 
             // Crear item de la preferencia
             PreferenceItemRequest itemRequest = PreferenceItemRequest.builder()
                     .id(String.valueOf(pedido.getId()))
                     .title("Carrito de compras del Buen Sabor")
-                    .description("Pedido realizado desde el carrito de compras del Buen Sabor")
+                    .description("Su pedido estara listo a las " + pedido.getHoraEstimadaFinalizacion() + "aproximadamente.")
                     .pictureUrl("https://www.bupasalud.com/sites/default/files/inline-images/bupa_598072389.jpg")
                     .categoryId("art")
                     .quantity(1)
@@ -49,14 +49,15 @@ public class MercadoPagoService {
 
             // URLs de redirección
             PreferenceBackUrlsRequest backUrls = PreferenceBackUrlsRequest.builder()
-                    .success("http://localhost:5173/productos")
-                    .failure("http://localhost:5173/productos")
-                    .pending("http://localhost:5173/productos")
+                    .success("http://localhost:5174/")
+                    .failure("http://localhost:5174/pedido")
+                    .pending("http://localhost:5174/pedido")
                     .build();
 
             // Crear la solicitud de preferencia
             PreferenceRequest preferenceRequest = PreferenceRequest.builder()
                     .items(items)
+                    .backUrls(backUrls)
                     .build();
 
             // Cliente de Mercado Pago

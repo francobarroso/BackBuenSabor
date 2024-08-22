@@ -41,4 +41,9 @@ public class ClienteServiceImp extends BaseServiceImp<Cliente, Long> implements 
     public Cliente findByEmail(String email) {
         return this.clienteRepository.findByUsuarioEmail(email);
     }
+
+    @Override
+    public boolean existsByUsuarioEmail(String email) {
+        return this.clienteRepository.existsByUsuarioEmail(email);
+    }
 }

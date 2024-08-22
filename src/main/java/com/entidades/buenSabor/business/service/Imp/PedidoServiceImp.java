@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.Month;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
 import java.util.*;
@@ -109,7 +110,8 @@ public class PedidoServiceImp extends BaseServiceImp<Pedido,Long> implements Ped
         pedido.setTotalCosto(totalCosto(detallePedidos));
 
         //Añadir fecha del pedido
-        pedido.setFechaPedido(LocalDate.now());
+        LocalDate fechaActual = LocalDate.now(ZoneId.of("America/Argentina/Buenos_Aires"));
+        pedido.setFechaPedido(fechaActual);
 
         //Añadir hora estimada de finalizacion
         pedido.setHoraEstimadaFinalizacion(horaEstimada(articulos));
