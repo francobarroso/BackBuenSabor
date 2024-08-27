@@ -11,6 +11,7 @@ import com.entidades.buenSabor.presentation.rest.Base.BaseControllerImp;
 import com.entidades.buenSabor.repositories.PedidoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -66,5 +67,14 @@ public class PedidoController extends BaseControllerImp<Pedido, PedidoDto, Pedid
     public Double getTotalByFecha(@RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
                                   @RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate){
         return this.pedidoRepository.sumTotalBetweenDates(startDate, endDate);
+    }
+
+    @PutMapping("/cambiarEstado/{id}")
+    public ResponseEntity<?> cambiarEstado(@RequestBody PedidoDto pedido, @PathVariable Long id) throws Exception{
+        try{
+            return ResponseEntity.ok(facade.update(pedido, id));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
     }
 }

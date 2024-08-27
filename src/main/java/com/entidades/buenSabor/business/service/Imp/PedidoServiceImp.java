@@ -1,11 +1,8 @@
 package com.entidades.buenSabor.business.service.Imp;
 
 import com.entidades.buenSabor.business.mapper.PedidoMapper;
-import com.entidades.buenSabor.business.service.ArticuloInsumoService;
-import com.entidades.buenSabor.business.service.ArticuloManufacturadoService;
+import com.entidades.buenSabor.business.service.*;
 import com.entidades.buenSabor.business.service.Base.BaseServiceImp;
-import com.entidades.buenSabor.business.service.PedidoService;
-import com.entidades.buenSabor.business.service.SucursalService;
 import com.entidades.buenSabor.domain.dto.PedidoDto;
 import com.entidades.buenSabor.domain.dto.PedidoShortDto;
 import com.entidades.buenSabor.domain.entities.*;
@@ -13,11 +10,13 @@ import com.entidades.buenSabor.domain.enums.Estado;
 import com.entidades.buenSabor.domain.enums.FormaPago;
 import com.entidades.buenSabor.domain.enums.Rol;
 import com.entidades.buenSabor.domain.enums.TipoEnvio;
+import com.entidades.buenSabor.email.EmailDto;
 import com.entidades.buenSabor.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 
+import java.io.ByteArrayOutputStream;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.Month;
@@ -58,6 +57,11 @@ public class PedidoServiceImp extends BaseServiceImp<Pedido,Long> implements Ped
 
     @Autowired
     private PedidoMapper pedidoMapper;
+
+    @Autowired
+    private FacturaService facturaService;
+    @Autowired
+    private EmailService emailService;
 
     @Override
     public Pedido create(Pedido pedido) {
@@ -264,10 +268,43 @@ public class PedidoServiceImp extends BaseServiceImp<Pedido,Long> implements Ped
     }
 
     @Override
-    public Pedido update(Pedido pedido, Long id) {
-        if(pedido != null || id != null){
-            throw new RuntimeException("No se puede actualizar un pedido.");
+    public Pedido update(Pedido pedidoReq, Long id) {
+        Pedido pedido = this.pedidoRepository.findById(id)
+                .orElseThrow(()-> new RuntimeException("No se encontro el pedido."));
+
+        if(pedido.getEmpleado() == null){
+            pedido.setEmpleado(pedidoReq.getEmpleado());
         }
+
+        // Si el pedido está en proceso no se puede cancelar
+        if (pedidoReq.getEstado() == Estado.CANCELADO && pedido.getEstado() != Estado.PENDIENTE) {
+            throw new RuntimeException("El pedido no se puede cancelar porque está en proceso");
+        }
+
+        // Si el pedido se cancela restaurar stock
+
+        // Si el pedido es aprobado, envíar factura
+        if (pedidoReq.getEstado() == Estado.PREPARACION) {
+            try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
+                // Crear un nuevo documento
+                this.facturaService.crearFacturaPdf(id, outputStream);
+
+                EmailDto email = new EmailDto();
+                email.setDestinatario(pedido.getCliente().getUsuario().getEmail());
+                email.setAsunto("Factura de su pedido #" + id);
+                email.setMensaje("¡Gracias por su compra " + pedido.getCliente().getNombre() + "\uD83D\uDE0E\uD83C\uDF54\uD83C\uDF55\uD83C\uDF5F !" +
+                        "Le adjuntamos su factura. Saludos!");
+
+                //Enviar el correo con la factura adjunta
+                this.emailService.enviarEmail(email, outputStream);
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw new RuntimeException("Error al generar o enviar la factura", e);
+            }
+        }
+
+
+        pedido.setEstado(pedidoReq.getEstado());
         return super.update(pedido, id);
     }
 
