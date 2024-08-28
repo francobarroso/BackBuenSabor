@@ -7,5 +7,6 @@ public enum Estado {
     PREPARACION,
     DELIVERY,
     ENTREGADO,
-    CANCELADO
+    CANCELADO,
+    PREPARADO
 }

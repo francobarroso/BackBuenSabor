@@ -29,4 +29,9 @@ public class EmpleadoFacadeImp extends BaseFacadeImp<Empleado, EmpleadoDto,Emple
     public List<EmpleadoDto> findBySucursal(Long idSucursal) {
         return this.empleadoMapper.toDTOsList(this.empleadoService.findBySucursal(idSucursal));
     }
+
+    @Override
+    public EmpleadoDto findByEmail(String email) {
+        return this.empleadoMapper.toDTO(this.empleadoService.findByEmail(email));
+    }
 }

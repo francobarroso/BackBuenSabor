@@ -26,7 +26,7 @@ public class CategoriaController extends BaseControllerImp<Categoria, CategoriaD
     }
 
     @GetMapping("/findByEmpresa/{idEmpresa}")
-    @PreAuthorize("hasAnyAuthority('superadmin','administrador', 'cajero')")
+    @PreAuthorize("hasAnyAuthority('superadmin','administrador', 'cajero', 'cocinero')")
     public ResponseEntity<?> findByEmpresa(@PathVariable("idEmpresa") Long idEmpresa){
         return ResponseEntity.ok(facade.findByEmpresa(idEmpresa));
     }

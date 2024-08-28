@@ -12,6 +12,7 @@ import com.entidades.buenSabor.domain.enums.Rol;
 import com.entidades.buenSabor.domain.enums.TipoEnvio;
 import com.entidades.buenSabor.email.EmailDto;
 import com.entidades.buenSabor.repositories.*;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
@@ -92,6 +93,7 @@ public class PedidoServiceImp extends BaseServiceImp<Pedido,Long> implements Ped
             DetallePedido detallePedido = detalle;
             Articulo articulo = this.articuloRepository.findById(detalle.getArticulo().getId())
                     .orElseThrow(() -> new RuntimeException("El articulo id: " + detalle.getArticulo().getId() + " no existe."));
+            descontarStock(articulo, detallePedido.getCantidad());
             detallePedido.setArticulo(articulo);
             detallePedido.setSubTotal(detalle.getCantidad() * articulo.getPrecioVenta());
             detallePedidos.add(detallePedido);
@@ -266,6 +268,32 @@ public class PedidoServiceImp extends BaseServiceImp<Pedido,Long> implements Ped
 
         return horaEstimada;
     }
+    @Transactional
+    public void descontarStock(Articulo articulo, Integer cantidad) {
+        if(articulo instanceof ArticuloInsumo){
+            int stockDescontado = ((ArticuloInsumo) articulo).getStockActual() - cantidad;
+            if(stockDescontado <= ((ArticuloInsumo) articulo).getStockMinimo()){
+                throw new RuntimeException("El insumo con id " + articulo.getId() + " alcanzó el stock minimo");
+            }
+            ((ArticuloInsumo) articulo).setStockActual(stockDescontado);
+        } else if (articulo instanceof ArticuloManufacturado) {
+            Set<ArticuloManufacturadoDetalle> detalles = ((ArticuloManufacturado) articulo).getArticuloManufacturadoDetalles();
+            if(detalles != null && !detalles.isEmpty()){
+                for(ArticuloManufacturadoDetalle detalle : detalles){
+                    ArticuloInsumo insumo = detalle.getArticuloInsumo();
+                    int cantidadInsumo = detalle.getCantidad() * cantidad;
+                    int stockDescontado = insumo.getStockActual() - cantidadInsumo;
+                    if(stockDescontado <= insumo.getStockMinimo()){
+                        throw new RuntimeException("El insumo con id " + insumo.getId() + " presente en el articulo "
+                        + articulo.getDenominacion() + "(id: " + articulo.getId() + ") alcanzo el stock mínimo");
+                    }
+                    insumo.setStockActual(stockDescontado);
+                }
+            }
+        }else{
+            throw new RuntimeException("Artículo con id: " + articulo.getId() + " no encontrado");
+        }
+    }
 
     @Override
     public Pedido update(Pedido pedidoReq, Long id) {
@@ -282,6 +310,13 @@ public class PedidoServiceImp extends BaseServiceImp<Pedido,Long> implements Ped
         }
 
         // Si el pedido se cancela restaurar stock
+        if (pedidoReq.getEstado() == Estado.CANCELADO){
+            for(DetallePedido detalle: pedido.getDetallePedidos()){
+                Articulo articulo = articuloRepository.findById(detalle.getArticulo().getId()).orElseThrow(() -> new RuntimeException("El artículo con id " + detalle.getArticulo().getId() + " no se ha encontrado."));
+                devolverStock(articulo, detalle.getCantidad());
+                detalle.setArticulo(articulo);
+            }
+        }
 
         // Si el pedido es aprobado, envíar factura
         if (pedidoReq.getEstado() == Estado.PREPARACION) {
@@ -306,6 +341,28 @@ public class PedidoServiceImp extends BaseServiceImp<Pedido,Long> implements Ped
 
         pedido.setEstado(pedidoReq.getEstado());
         return super.update(pedido, id);
+    }
+
+    public void devolverStock(Articulo articulo, int cantidad){
+        if (articulo instanceof ArticuloInsumo){
+            // Si el articulo es un insumo
+            int stockAumentado = ((ArticuloInsumo) articulo).getStockActual() + cantidad; // Aumentar cantidad a stock actual
+            ((ArticuloInsumo) articulo).setStockActual(stockAumentado); // Asignarle al insumo el stock descontado
+        }else if(articulo instanceof ArticuloManufacturado){
+            // Obtener los detalles del manufacturado
+            Set<ArticuloManufacturadoDetalle> detalles = ((ArticuloManufacturado) articulo).getArticuloManufacturadoDetalles();
+            if (detalles != null && !detalles.isEmpty()) {
+                for (ArticuloManufacturadoDetalle detalle : detalles) { // Recorrer los detalles
+                    ArticuloInsumo insumo = detalle.getArticuloInsumo();
+                    int cantidadInsumo = detalle.getCantidad() * cantidad; // Multiplicar la cantidad necesaria de insumo por la cantidad de manufacturados del pedido
+                    int stockAumentado = insumo.getStockActual() + cantidadInsumo; // Aumentar el stock actual
+                    insumo.setStockActual(stockAumentado); // Asignarle al insumo el stock descontado
+                }
+            }
+        }else{
+            throw new RuntimeException("Artículo con id " + articulo.getId() + " no encontrado");
+        }
+
     }
 
     @Override

@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface EmpleadoFacade extends BaseFacade<EmpleadoDto,EmpleadoDto,Long> {
     List<EmpleadoDto> findBySucursal(Long idSucursal);
+    EmpleadoDto findByEmail(String email);
 }

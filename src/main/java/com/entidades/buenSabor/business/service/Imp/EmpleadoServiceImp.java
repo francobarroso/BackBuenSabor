@@ -23,6 +23,11 @@ public class EmpleadoServiceImp extends BaseServiceImp<Empleado, Long> implement
     }
 
     @Override
+    public Empleado findByEmail(String email) {
+        return this.empleadoRepository.findByUsuarioEmail(email);
+    }
+
+    @Override
     public Empleado create(Empleado empleado) {
         Sucursal sucursal = this.sucursalRepository.findById(empleado.getSucursal().getId())
                 .orElseThrow(() -> new RuntimeException("La sucursal con id " + empleado.getSucursal().getId() + " no existe."));

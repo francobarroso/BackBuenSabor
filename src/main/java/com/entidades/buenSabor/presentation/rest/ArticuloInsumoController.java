@@ -20,7 +20,7 @@ public class ArticuloInsumoController extends BaseControllerImp<ArticuloInsumo, 
     }
 
     @GetMapping("/findBySucursal/{idSucursal}")
-    @PreAuthorize("hasAnyAuthority('superadmin','administrador', 'cajero')")
+    @PreAuthorize("hasAnyAuthority('superadmin','administrador', 'cajero', 'cocinero')")
     public ResponseEntity<?> findBySucursales(@PathVariable("idSucursal") Long idSucursal) {
         return ResponseEntity.ok(facade.findBySucursales(idSucursal));
     }

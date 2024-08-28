@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface EmpleadoService extends BaseService<Empleado,Long> {
     List<Empleado> findBySucursal(Long idSucursal);
+    Empleado findByEmail(String email);
 }
