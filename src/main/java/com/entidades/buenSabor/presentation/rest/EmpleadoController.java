@@ -27,7 +27,7 @@ public class EmpleadoController extends BaseControllerImp<Empleado, EmpleadoDto,
         return ResponseEntity.ok(facade.findBySucursal(idSucursal));
     }
     @GetMapping("/findByEmail")
-    @PreAuthorize("hasAnyAuthority('superadmin', 'admin', 'cajero', 'cocinero', 'delivery')")
+    @PreAuthorize("hasAnyAuthority('administrador', 'cajero', 'cocinero', 'delivery')")
     public ResponseEntity<?> findByEmail(@RequestParam String email){
         return ResponseEntity.ok(facade.findByEmail(email));
     }

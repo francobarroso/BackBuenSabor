@@ -30,4 +30,9 @@ public class EmpresaServiceImp extends BaseServiceImp<Empresa,Long> implements E
 
         
     }
+
+    @Override
+    public Empresa findBySucursal(Long idSucursal) {
+        return this.empresaRepository.findWithSucursalesById(idSucursal);
+    }
 }
