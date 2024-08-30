@@ -17,6 +17,6 @@ public interface PedidoService extends BaseService<Pedido, Long> {
     List<PedidoShortDto> getByRol(Rol rol, long sucursalId);
 
     List<Pedido> findBySucursal(Long idSucursal);
-    List<Object[]> getGananciaByFecha(LocalDate startDate, LocalDate endDate);
-    List<Object[]> getProductosByFecha(LocalDate startDate, LocalDate endDate);
+    List<Object[]> getGananciaByFecha(LocalDate startDate, LocalDate endDate, Long idSucursal);
+    List<Object[]> getProductosByFecha(LocalDate startDate, LocalDate endDate, Long idSucursal);
 }

@@ -31,7 +31,7 @@ public class PromocionFacadeImp extends BaseFacadeImp<Promocion, PromocionDto, P
     }
 
     @Override
-    public List<PromocionDto> findByEcommerce() {
-        return this.promocionMapper.toDTOsList(this.promocionService.findByEcommerce());
+    public List<PromocionDto> findByEcommerce(Long idSucursal) {
+        return this.promocionMapper.toDTOsList(this.promocionService.findByEcommerce(idSucursal));
     }
 }

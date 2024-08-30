@@ -157,8 +157,8 @@ public class PedidoServiceImp extends BaseServiceImp<Pedido,Long> implements Ped
     }
 
     @Override
-    public List<Object[]> getGananciaByFecha(LocalDate startDate, LocalDate endDate) {
-        List<Pedido> pedidos = pedidoRepository.findPedidoByDate(startDate, endDate);
+    public List<Object[]> getGananciaByFecha(LocalDate startDate, LocalDate endDate, Long idSucursal) {
+        List<Pedido> pedidos = pedidoRepository.findPedidoByDate(startDate, endDate, idSucursal);
 
         // Verificar si las fechas están en el mismo mes y año
         boolean sameMonth = startDate.getYear() == endDate.getYear() && startDate.getMonth() == endDate.getMonth();
@@ -200,8 +200,8 @@ public class PedidoServiceImp extends BaseServiceImp<Pedido,Long> implements Ped
     }
 
     @Override
-    public List<Object[]> getProductosByFecha(LocalDate startDate, LocalDate endDate) {
-        List<Pedido> pedidos = pedidoRepository.findPedidoByDate(startDate, endDate);
+    public List<Object[]> getProductosByFecha(LocalDate startDate, LocalDate endDate, Long idSucursal) {
+        List<Pedido> pedidos = pedidoRepository.findPedidoByDate(startDate, endDate, idSucursal);
         Map<String, Integer> articuloVentas = new HashMap<>();
 
         // Verificar si las fechas están en el mismo mes y año

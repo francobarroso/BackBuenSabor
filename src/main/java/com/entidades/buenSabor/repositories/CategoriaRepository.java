@@ -21,8 +21,18 @@ public interface CategoriaRepository extends BaseRepository<Categoria,Long>{
     @Query("SELECT DISTINCT c FROM Categoria c " +
             "JOIN c.articulos a " +
             "JOIN ArticuloInsumo ai ON a.id = ai.id " +
+            "WHERE ai.esParaElaborar = false AND EXISTS (" +
+            "   SELECT 1 FROM c.sucursales s WHERE s.id = :idSucursal)")
+    List<Categoria> findCategoriaInsumos(Long idSucursal);
+    @Query("SELECT c FROM Categoria c WHERE c.esInsumo = false AND EXISTS (" +
+            "   SELECT 1 FROM c.sucursales s WHERE s.id = :idSucursal)")
+    List<Categoria> findCategoriaManufacturados(Long idSucursal);
+
+    @Query("SELECT DISTINCT c FROM Categoria c " +
+            "JOIN c.articulos a " +
+            "JOIN ArticuloInsumo ai ON a.id = ai.id " +
             "WHERE ai.esParaElaborar = false")
-    List<Categoria> findCategoriaInsumos();
+    List<Categoria> findAllCategoriaInsumos();
     @Query("SELECT c FROM Categoria c WHERE c.esInsumo = false")
-    List<Categoria> findCategoriaManufacturados();
+    List<Categoria> findAllCategoriaManufacturados();
 }

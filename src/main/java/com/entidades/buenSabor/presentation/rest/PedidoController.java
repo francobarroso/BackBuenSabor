@@ -50,23 +50,26 @@ public class PedidoController extends BaseControllerImp<Pedido, PedidoDto, Pedid
     @GetMapping("/gananciaByFecha")
     public List<Object[]> getGananciaByFecha(
             @RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
-            @RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
+            @RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
+            @RequestParam("idSucursal") Long idSucursal) {
 
-        return this.pedidoService.getGananciaByFecha(startDate, endDate);
+        return this.pedidoService.getGananciaByFecha(startDate, endDate, idSucursal);
     }
 
     @GetMapping("/productosByFecha")
     public List<Object[]> getProductosByFecha(
             @RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
-            @RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
+            @RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
+            @RequestParam("idSucursal") Long idSucursal) {
 
-        return this.pedidoService.getProductosByFecha(startDate, endDate);
+        return this.pedidoService.getProductosByFecha(startDate, endDate, idSucursal);
     }
 
     @GetMapping("/totalByFecha")
     public Double getTotalByFecha(@RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
-                                  @RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate){
-        return this.pedidoRepository.sumTotalBetweenDates(startDate, endDate);
+                                  @RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
+                                  @RequestParam("idSucursal") Long idSucursal){
+        return this.pedidoRepository.sumTotalBetweenDates(startDate, endDate, idSucursal);
     }
 
     @PutMapping("/cambiarEstado/{id}")

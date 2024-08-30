@@ -181,10 +181,18 @@ public class CategoriaServiceImp extends BaseServiceImp<Categoria, Long> impleme
     }
 
     @Override
-    public List<Categoria> findByEcommerce() {
+    public List<Categoria> findByEcommerce(Long idSucursal) {
         List<Categoria> result = new ArrayList<>();
-        result.addAll(this.categoriaRepository.findCategoriaInsumos());
-        result.addAll(this.categoriaRepository.findCategoriaManufacturados());
+        result.addAll(this.categoriaRepository.findCategoriaInsumos(idSucursal));
+        result.addAll(this.categoriaRepository.findCategoriaManufacturados(idSucursal));
+        return result;
+    }
+
+    @Override
+    public List<Categoria> findAllByEcommerce() {
+        List<Categoria> result = new ArrayList<>();
+        result.addAll(this.categoriaRepository.findAllCategoriaInsumos());
+        result.addAll(this.categoriaRepository.findAllCategoriaManufacturados());
         return result;
     }
 

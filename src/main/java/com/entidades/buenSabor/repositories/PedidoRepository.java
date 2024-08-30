@@ -20,10 +20,11 @@ public interface PedidoRepository extends BaseRepository<Pedido,Long>{
 
     List<Pedido> findBySucursalId(Long idSucursal);
 
-    @Query("SELECT p FROM Pedido p WHERE p.fechaPedido BETWEEN :startDate AND :endDate AND p.estado = com.entidades.buenSabor.domain.enums.Estado.PENDIENTE")
+    @Query("SELECT p FROM Pedido p WHERE p.fechaPedido BETWEEN :startDate AND :endDate AND p.estado = com.entidades.buenSabor.domain.enums.Estado.PENDIENTE AND p.sucursal.id = :idSucursal")
     List<Pedido> findPedidoByDate(@Param("startDate") LocalDate startDate,
-                                           @Param("endDate") LocalDate endDate);
+                                           @Param("endDate") LocalDate endDate,
+                                  @Param("idSucursal") Long idSucursal);
 
-    @Query("SELECT SUM(p.total) FROM Pedido p WHERE p.fechaPedido BETWEEN :startDate AND :endDate AND p.estado = com.entidades.buenSabor.domain.enums.Estado.PENDIENTE")
-    Double sumTotalBetweenDates(@Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
+    @Query("SELECT SUM(p.total) FROM Pedido p WHERE p.fechaPedido BETWEEN :startDate AND :endDate AND p.estado = com.entidades.buenSabor.domain.enums.Estado.PENDIENTE AND p.sucursal.id = :idSucursal")
+    Double sumTotalBetweenDates(@Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate, @Param("idSucursal") Long idSucursal);
 }

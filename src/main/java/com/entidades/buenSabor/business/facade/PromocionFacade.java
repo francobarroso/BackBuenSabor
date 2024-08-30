@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface PromocionFacade extends BaseFacade<PromocionDto, PromocionDto, Long> {
     List<PromocionDto> findBySucursal(Long idSucursal);
-    List<PromocionDto> findByEcommerce();
+    List<PromocionDto> findByEcommerce(Long idSucursal);
 }

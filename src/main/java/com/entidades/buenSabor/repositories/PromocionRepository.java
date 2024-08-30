@@ -20,7 +20,9 @@ public interface PromocionRepository extends BaseRepository<Promocion,Long>{
 
     @Query("SELECT p FROM Promocion p JOIN p.promocionDetalles det WHERE det.articulo.id = :idManufacturado")
     List<Promocion> findByArticuloManufacturadoId(@Param("idManufacturado") Long idManufacturado);
-
-    List<Promocion> findByHabilitadoTrueAndFechaHastaGreaterThanEqual(LocalDate fechaActual);
+    @Query("SELECT p FROM Promocion p " +
+            "JOIN p.sucursales s " +
+            "WHERE p.habilitado = true AND p.fechaHasta >= :fechaActual AND s.id = :idSucursal")
+    List<Promocion> findByHabilitadoTrueAndFechaHastaGreaterThanEqual(LocalDate fechaActual, @Param("idSucursal") Long idSucursal);
 
 }

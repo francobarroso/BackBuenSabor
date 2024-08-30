@@ -12,5 +12,5 @@ import java.util.Set;
 public interface PromocionService extends BaseService<Promocion, Long> {
     Promocion create(Promocion promocion);
     List<Promocion> findBySucursal(Long idSucursal);
-    List<Promocion> findByEcommerce();
+    List<Promocion> findByEcommerce(Long idSucursal);
 }

@@ -31,8 +31,13 @@ public class CategoriaController extends BaseControllerImp<Categoria, CategoriaD
         return ResponseEntity.ok(facade.findByEmpresa(idEmpresa));
     }
 
+    @GetMapping("/findByEcommerce/{idSucursal}")
+    public ResponseEntity<?> findByEcommerce(@PathVariable("idSucursal") Long idSucursal){
+        return ResponseEntity.ok(facade.findByEcommerce(idSucursal));
+    }
+
     @GetMapping("/findByEcommerce")
-    public ResponseEntity<?> findByEcommerce(){
-        return ResponseEntity.ok(facade.findByEcommerce());
+    public ResponseEntity<?> findAllByEcommerce(){
+        return ResponseEntity.ok(facade.findAllByEcommerce());
     }
 }

@@ -233,8 +233,8 @@ public class PromocionServiceImp extends BaseServiceImp<Promocion, Long> impleme
     }
 
     @Override
-    public List<Promocion> findByEcommerce() {
+    public List<Promocion> findByEcommerce(Long idSucursal) {
         LocalDate fechaActual = LocalDate.now();
-        return this.promocionRepository.findByHabilitadoTrueAndFechaHastaGreaterThanEqual(fechaActual);
+        return this.promocionRepository.findByHabilitadoTrueAndFechaHastaGreaterThanEqual(fechaActual, idSucursal);
     }
 }

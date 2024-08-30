@@ -11,5 +11,7 @@ public interface CategoriaService extends BaseService<Categoria, Long> {
 
     List<Categoria> findByEmpresa(Long idEmpresa);
 
-    List<Categoria> findByEcommerce();
+    List<Categoria> findByEcommerce(Long idSucursal);
+
+    List<Categoria> findAllByEcommerce();
 }
