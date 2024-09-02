@@ -75,7 +75,7 @@ class LocalidadesDownloader implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-       /*RestTemplate restTemplate = new RestTemplate();
+       RestTemplate restTemplate = new RestTemplate();
         String jsonResponse = restTemplate.getForObject("https://infra.datos.gob.ar/georef/departamentos.json", String.class);
         JSONObject jsonObject = new JSONObject(jsonResponse);
         JSONArray departamentosArray = jsonObject.getJSONArray("departamentos");
