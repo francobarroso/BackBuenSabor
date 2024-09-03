@@ -8,6 +8,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -43,6 +44,7 @@ public class Pedido extends Base{
 
     @ManyToOne
     @JoinColumn(name = "cliente_id")
+    @NotAudited
     private Cliente cliente;
 
     @OneToMany(cascade = CascadeType.ALL)
@@ -50,10 +52,12 @@ public class Pedido extends Base{
     //DE ESTA MANERA PONE EL FOREIGN KEY 'pedido_id' EN LA TABLA DE LOS MANY
     @JoinColumn(name = "pedido_id")
     //SE AGREGA EL BUILDER.DEFAULT PARA QUE BUILDER NO SOBREESCRIBA LA INICIALIZACION DE LA LISTA
+    @NotAudited
     @Builder.Default
     private Set<DetallePedido> detallePedidos = new HashSet<>();
 
     @ManyToOne
+    @NotAudited
     @JoinColumn(name = "empleado_id")
     private Empleado empleado;
 }

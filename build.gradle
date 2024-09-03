@@ -58,7 +58,7 @@ dependencies {
 	implementation 'io.github.cdimascio:dotenv-java:2.2.4'
 
 	//ENVERS
-	implementation 'org.hibernate.orm:hibernate-envers:6.6.0.Final'
+	implementation 'org.hibernate.orm:hibernate-envers:6.4.4.Final'
 
 	//Security
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'

@@ -28,6 +28,7 @@ public abstract class Persona extends Base {
     private LocalDate fechaNacimiento;
 
     @OneToOne(cascade = CascadeType.ALL)
+    @NotAudited
     protected Usuario usuario;
 
     @OneToOne(cascade = CascadeType.ALL)

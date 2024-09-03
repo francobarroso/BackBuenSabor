@@ -1,7 +1,7 @@
 package com.entidades.buenSabor.business.service.Imp;
 
 import com.entidades.buenSabor.business.service.EmailService;
-import com.entidades.buenSabor.email.EmailDto;
+import com.entidades.buenSabor.config.email.EmailDto;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import org.springframework.core.io.ByteArrayResource;

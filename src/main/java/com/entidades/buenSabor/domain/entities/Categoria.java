@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -27,16 +28,19 @@ public class Categoria extends Base{
     private Set<Sucursal> sucursales = new HashSet<>();
 
     @OneToMany
+    @NotAudited
     @JoinColumn(name = "categoria_id")
     @Builder.Default
     private Set<Articulo> articulos = new HashSet<>();
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "categoriaPadre")
     @JsonIgnoreProperties("categoriaPadre")
+    @NotAudited
     @Builder.Default
     private Set<Categoria> subCategorias = new HashSet<>();
 
     @ManyToOne
+    @NotAudited
     @JoinColumn(name = "categoria_padre_id")
     @JsonIgnoreProperties("subCategorias")
     private Categoria categoriaPadre;

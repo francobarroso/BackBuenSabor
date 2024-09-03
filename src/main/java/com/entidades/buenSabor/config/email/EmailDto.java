@@ -1,4 +1,4 @@
-package com.entidades.buenSabor.email;
+package com.entidades.buenSabor.config.email;
 
 import lombok.Getter;
 import lombok.Setter;

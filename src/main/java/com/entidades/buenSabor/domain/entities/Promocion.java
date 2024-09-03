@@ -44,11 +44,13 @@ public class Promocion  extends Base{
 
 
     @ManyToMany (mappedBy = "promociones")
+    @NotAudited
     @JsonIgnoreProperties("promociones")
     private Set<Sucursal> sucursales = new HashSet<>();
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name="promocion_id")
+    @NotAudited
     @Builder.Default
     private Set<PromocionDetalle> promocionDetalles = new HashSet<>();
 }

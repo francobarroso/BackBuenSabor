@@ -132,10 +132,17 @@ public class FacturaServiceImp extends BaseServiceImp<Factura,Long> implements F
         addTableHeader(table, new String[]{"Código", "Articulo", "Cantidad", "Subtotal"});
 
         pedido.getDetallePedidos().forEach(detalle -> {
-            table.addCell(new PdfPCell(new Phrase(String.valueOf(detalle.getArticulo().getId()), texto)));
-            table.addCell(new PdfPCell(new Phrase(detalle.getArticulo().getDenominacion(), texto)));
-            table.addCell(new PdfPCell(new Phrase(String.valueOf(detalle.getCantidad()), texto)));
-            table.addCell(new PdfPCell(new Phrase(String.valueOf("$" + detalle.getSubTotal()), texto)));
+            if (detalle.getArticulo() != null) {
+                table.addCell(new PdfPCell(new Phrase(String.valueOf(detalle.getArticulo().getId()), texto)));
+                table.addCell(new PdfPCell(new Phrase(detalle.getArticulo().getDenominacion(), texto)));
+                table.addCell(new PdfPCell(new Phrase(String.valueOf(detalle.getCantidad()), texto)));
+                table.addCell(new PdfPCell(new Phrase(String.valueOf("$" + detalle.getSubTotal()), texto)));
+            } else if (detalle.getPromocion() != null) {
+                table.addCell(new PdfPCell(new Phrase(String.valueOf(detalle.getPromocion().getId()), texto)));
+                table.addCell(new PdfPCell(new Phrase(detalle.getPromocion().getDenominacion(), texto)));
+                table.addCell(new PdfPCell(new Phrase(String.valueOf(detalle.getCantidad()), texto)));
+                table.addCell(new PdfPCell(new Phrase(String.valueOf("$" + detalle.getSubTotal()), texto)));
+            }
         });
 
         document.add(table);

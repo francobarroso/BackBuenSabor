@@ -1,11 +1,11 @@
 package com.entidades.buenSabor.domain.entities;
 
-import com.entidades.buenSabor.domain.dto.ArticuloManufacturadoDto;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
 
 @Entity
 @AllArgsConstructor
@@ -18,5 +18,6 @@ public class PromocionDetalle extends Base{
     private int cantidad;
 
     @ManyToOne
+    @NotAudited
     private Articulo articulo;
 }

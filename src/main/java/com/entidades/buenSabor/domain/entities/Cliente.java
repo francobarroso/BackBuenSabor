@@ -32,5 +32,6 @@ public class Cliente extends Persona{
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true)
     //SE AGREGA EL BUILDER.DEFAULT PARA QUE BUILDER NO SOBREESCRIBA LA INICIALIZACION DE LA LISTA
     @Builder.Default
+    @NotAudited
     private Set<Pedido> pedidos = new HashSet<>();
 }

@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
 
 @Entity
 @AllArgsConstructor
@@ -18,8 +19,10 @@ public class DetallePedido extends Base{
     private Double subTotal;
 
     @ManyToOne
+    @NotAudited
     private Articulo articulo;
 
     @ManyToOne
+    @NotAudited
     private Promocion promocion;
 }

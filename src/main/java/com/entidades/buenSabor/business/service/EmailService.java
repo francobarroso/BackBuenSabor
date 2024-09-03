@@ -1,6 +1,6 @@
 package com.entidades.buenSabor.business.service;
 
-import com.entidades.buenSabor.email.EmailDto;
+import com.entidades.buenSabor.config.email.EmailDto;
 import jakarta.mail.MessagingException;
 
 import java.io.ByteArrayOutputStream;

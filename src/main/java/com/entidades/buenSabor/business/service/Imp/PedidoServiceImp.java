@@ -1,6 +1,5 @@
 package com.entidades.buenSabor.business.service.Imp;
 
-import com.entidades.buenSabor.business.mapper.PedidoMapper;
 import com.entidades.buenSabor.business.service.*;
 import com.entidades.buenSabor.business.service.Base.BaseServiceImp;
 import com.entidades.buenSabor.domain.dto.PedidoDto;
@@ -10,13 +9,11 @@ import com.entidades.buenSabor.domain.enums.Estado;
 import com.entidades.buenSabor.domain.enums.FormaPago;
 import com.entidades.buenSabor.domain.enums.Rol;
 import com.entidades.buenSabor.domain.enums.TipoEnvio;
-import com.entidades.buenSabor.email.EmailDto;
+import com.entidades.buenSabor.config.email.EmailDto;
 import com.entidades.buenSabor.repositories.*;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
-
 import java.io.ByteArrayOutputStream;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -36,28 +33,16 @@ public class PedidoServiceImp extends BaseServiceImp<Pedido,Long> implements Ped
     private ArticuloRepository articuloRepository;
 
     @Autowired
-    private PedidoRepository pedidoRepository;
+    private  PromocionRepository promocionRepository;
 
     @Autowired
-    private ArticuloManufacturadoService articuloManufacturadoService;
+    private PedidoRepository pedidoRepository;
 
     @Autowired
     private ArticuloInsumoRepository articuloInsumoRepository;
 
     @Autowired
     private ArticuloManufacturadoRepository articuloManufacturadoRepository;
-
-    @Autowired
-    private ClienteRepository clienteRepository;
-
-    @Autowired
-    private EmpleadoRepository empleadoRepository;
-
-    @Autowired
-    private LocalidadRepository localidadRepository;
-
-    @Autowired
-    private PedidoMapper pedidoMapper;
 
     @Autowired
     private FacturaService facturaService;
@@ -91,18 +76,31 @@ public class PedidoServiceImp extends BaseServiceImp<Pedido,Long> implements Ped
 
         for(DetallePedido detalle: pedido.getDetallePedidos()){
             DetallePedido detallePedido = detalle;
-            Articulo articulo = this.articuloRepository.findById(detalle.getArticulo().getId())
-                    .orElseThrow(() -> new RuntimeException("El articulo id: " + detalle.getArticulo().getId() + " no existe."));
-            descontarStock(articulo, detallePedido.getCantidad());
-            detallePedido.setArticulo(articulo);
-            detallePedido.setSubTotal(detalle.getCantidad() * articulo.getPrecioVenta());
-            detallePedidos.add(detallePedido);
+            if(detalle.getArticulo() != null){
+                Articulo articulo = this.articuloRepository.findById(detalle.getArticulo().getId())
+                        .orElseThrow(() -> new RuntimeException("El articulo id: " + detalle.getArticulo().getId() + " no existe."));
+                descontarStock(articulo, detallePedido.getCantidad());
+                detallePedido.setArticulo(articulo);
+                detallePedido.setSubTotal(detalle.getCantidad() * articulo.getPrecioVenta());
+                detallePedidos.add(detallePedido);
+
+                //Añadir articulos
+                articulos.add(articulo);
+            }else if(detalle.getPromocion() != null){
+                Promocion promocion = this.promocionRepository.findById(detalle.getPromocion().getId())
+                        .orElseThrow(() -> new RuntimeException("La promocion id: " + detalle.getPromocion().getId() + " no existe."));
+                for(PromocionDetalle promocionDetalle : promocion.getPromocionDetalles()){
+                    descontarStock(promocionDetalle.getArticulo(), promocionDetalle.getCantidad()*detallePedido.getCantidad());
+                    detallePedido.setPromocion(promocion);
+                    detallePedido.setSubTotal(detalle.getCantidad() * promocion.getPrecioPromocional());
+                    detallePedidos.add(detallePedido);
+                }
+            }else {
+                throw new RuntimeException("No se han enviando ni articulos ni promociones en el pedido.");
+            }
 
             //Calcular el total del pedido
             total += detallePedido.getSubTotal();
-
-            //Añadir articulos
-            articulos.add(articulo);
         }
 
         //Validar total de la venta
@@ -153,7 +151,7 @@ public class PedidoServiceImp extends BaseServiceImp<Pedido,Long> implements Ped
 
     @Override
     public List<Pedido> findBySucursal(Long idSucursal) {
-        return this.pedidoRepository.findBySucursalId(idSucursal);
+        return this.pedidoRepository.findBySucursalIdOrderByIdDesc(idSucursal);
     }
 
     @Override
@@ -312,9 +310,18 @@ public class PedidoServiceImp extends BaseServiceImp<Pedido,Long> implements Ped
         // Si el pedido se cancela restaurar stock
         if (pedidoReq.getEstado() == Estado.CANCELADO){
             for(DetallePedido detalle: pedido.getDetallePedidos()){
-                Articulo articulo = articuloRepository.findById(detalle.getArticulo().getId()).orElseThrow(() -> new RuntimeException("El artículo con id " + detalle.getArticulo().getId() + " no se ha encontrado."));
-                devolverStock(articulo, detalle.getCantidad());
-                detalle.setArticulo(articulo);
+                if(detalle.getArticulo() != null){
+                    Articulo articulo = articuloRepository.findById(detalle.getArticulo().getId()).orElseThrow(() -> new RuntimeException("El artículo con id " + detalle.getArticulo().getId() + " no se ha encontrado."));
+                    devolverStock(articulo, detalle.getCantidad());
+                    detalle.setArticulo(articulo);
+                }else if(detalle.getPromocion() != null){
+                    Promocion promocion = this.promocionRepository.findById(detalle.getPromocion().getId())
+                            .orElseThrow(() -> new RuntimeException("La promocion id: " + detalle.getPromocion().getId() + " no existe."));
+                    for(PromocionDetalle promocionDetalle : promocion.getPromocionDetalles()){
+                        devolverStock(promocionDetalle.getArticulo(), promocionDetalle.getCantidad()*detalle.getCantidad());
+                        detalle.setPromocion(promocion);
+                    }
+                }
             }
         }
 
@@ -337,7 +344,6 @@ public class PedidoServiceImp extends BaseServiceImp<Pedido,Long> implements Ped
                 throw new RuntimeException("Error al generar o enviar la factura", e);
             }
         }
-
 
         pedido.setEstado(pedidoReq.getEstado());
         return super.update(pedido, id);

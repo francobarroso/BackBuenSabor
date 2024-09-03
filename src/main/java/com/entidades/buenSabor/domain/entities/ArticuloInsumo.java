@@ -5,9 +5,6 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.envers.Audited;
 
-import java.util.HashSet;
-import java.util.Set;
-
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor

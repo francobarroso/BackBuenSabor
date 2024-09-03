@@ -35,9 +35,11 @@ public class Articulo  extends Base {
     protected Set<ImagenArticulo> imagenes = new HashSet<>();
 
     @ManyToOne
+    @NotAudited
     protected UnidadMedida unidadMedida;
 
     @ManyToOne
+    @NotAudited
     @JoinColumn(name = "categoria_id")
     @JsonIgnoreProperties("articulos")
     private Categoria categoria;

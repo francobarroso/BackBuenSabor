@@ -5,6 +5,7 @@ import jakarta.transaction.Transactional;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -29,6 +30,7 @@ public class Sucursal extends  Base{
     private boolean esCasaMatriz;
 
     @OneToOne(cascade = CascadeType.ALL)
+    @NotAudited
     private Domicilio domicilio;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -37,6 +39,7 @@ public class Sucursal extends  Base{
             joinColumns = @JoinColumn(name = "promocion_id"),
             inverseJoinColumns = @JoinColumn(name = "sucursal_id"))
     //SE AGREGA EL BUILDER.DEFAULT PARA QUE BUILDER NO SOBREESCRIBA LA INICIALIZACION DE LA LISTA
+    @NotAudited
     @Builder.Default
     private Set<Promocion> promociones = new HashSet<>();
 
@@ -52,9 +55,11 @@ public class Sucursal extends  Base{
     private Set<Categoria> categorias = new HashSet<>();
 
     @OneToMany(mappedBy = "sucursal",cascade = CascadeType.REFRESH,fetch = FetchType.LAZY)
+    @NotAudited
     @Builder.Default
     private Set<Empleado> empleados = new HashSet<>();
 
     @ManyToOne
+    @NotAudited
     private Empresa empresa;
 }

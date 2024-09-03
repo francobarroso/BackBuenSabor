@@ -1,4 +1,4 @@
-package com.entidades.buenSabor.email;
+package com.entidades.buenSabor.config.email;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
