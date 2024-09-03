@@ -11,7 +11,7 @@ import org.hibernate.envers.Audited;
 @Setter
 @Getter
 @SuperBuilder
-//@Audited
+@Audited
 public class ImagenPersona extends Base{
     private String url;
 }

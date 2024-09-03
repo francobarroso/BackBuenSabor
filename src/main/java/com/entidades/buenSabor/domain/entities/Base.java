@@ -16,7 +16,6 @@ import java.io.Serializable;
 @Getter
 @ToString
 @Setter
-//@Audited
 @SuperBuilder
 public abstract class Base implements Serializable {
     @Id

@@ -16,7 +16,7 @@ import java.util.Set;
 @Entity
 @ToString(exclude = {"subCategorias", "categoriaPadre"})
 @SuperBuilder
-//@Audited
+@Audited
 public class Categoria extends Base{
 
     private String denominacion;

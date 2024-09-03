@@ -16,7 +16,7 @@ import java.util.Set;
 @Setter
 @Getter
 @SuperBuilder
-//@Audited
+@Audited
 public class Cliente extends Persona{
 
     @ManyToMany(cascade = CascadeType.ALL)

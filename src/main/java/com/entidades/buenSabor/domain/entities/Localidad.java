@@ -14,7 +14,7 @@ import java.util.List;
 @Getter
 @ToString
 @SuperBuilder
-//@Audited
+@Audited
 public class Localidad extends Base{
     private String nombre;
 

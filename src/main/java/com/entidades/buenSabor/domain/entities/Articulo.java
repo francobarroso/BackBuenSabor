@@ -18,7 +18,7 @@ import java.util.Set;
 @Setter
 @SuperBuilder
 @Inheritance(strategy = InheritanceType.JOINED)
-//@Audited
+@Audited
 public class Articulo  extends Base {
 
     protected String denominacion;

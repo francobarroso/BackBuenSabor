@@ -12,7 +12,7 @@ import org.hibernate.envers.Audited;
 @Getter
 @ToString
 @SuperBuilder
-//@Audited
+@Audited
 public class Provincia extends Base {
     private String nombre;
     @ManyToOne(cascade = CascadeType.MERGE)

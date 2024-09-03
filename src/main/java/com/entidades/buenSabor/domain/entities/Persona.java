@@ -18,7 +18,7 @@ import java.util.Set;
 @Getter
 @ToString
 @SuperBuilder
-//@Audited
+@Audited
 @Inheritance(strategy = InheritanceType.JOINED)
 public abstract class Persona extends Base {
 

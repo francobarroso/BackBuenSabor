@@ -12,7 +12,7 @@ import org.hibernate.envers.Audited;
 @Getter
 @ToString
 @SuperBuilder
-//@Audited
+@Audited
 public class ImagenPromocion extends Base{
     private String url;
 }

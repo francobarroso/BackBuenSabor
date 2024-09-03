@@ -15,7 +15,7 @@ import java.util.Set;
 @Setter
 @Getter
 @SuperBuilder
-//@Audited
+@Audited
 public class Empleado extends Persona{
 
     @OneToMany(mappedBy = "empleado", cascade = CascadeType.REFRESH, orphanRemoval = true)

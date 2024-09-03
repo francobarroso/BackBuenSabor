@@ -11,7 +11,7 @@ import org.hibernate.envers.Audited;
 @Setter
 @Getter
 @SuperBuilder
-//@Audited
+@Audited
 public class UnidadMedida extends Base{
 
     private String denominacion;
