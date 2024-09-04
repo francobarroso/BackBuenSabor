@@ -17,7 +17,7 @@ public class PromocionController extends BaseControllerImp<Promocion, PromocionD
     }
 
     @GetMapping("/findBySucursal/{idSucursal}")
-    @PreAuthorize("hasAnyAuthority('superadmin','administrador', 'cocinero')")
+    @PreAuthorize("hasAnyAuthority('superadmin','administrador', 'cocinero', 'cajero')")
     public ResponseEntity<?> findBySucursal(@PathVariable("idSucursal") Long idSucursal){
         return ResponseEntity.ok(facade.findBySucursal(idSucursal));
     }
