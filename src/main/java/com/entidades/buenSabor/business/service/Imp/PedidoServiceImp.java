@@ -165,8 +165,13 @@ public class PedidoServiceImp extends BaseServiceImp<Pedido,Long> implements Ped
             Map<LocalDate, Double> totalesPorDia = pedidos.stream()
                     .collect(Collectors.groupingBy(
                             Pedido::getFechaPedido,
+                            LinkedHashMap::new,
                             Collectors.summingDouble(Pedido::getTotal)
                     ));
+
+            // Ordenar las entradas del map por fecha
+            List<Map.Entry<LocalDate, Double>> sortedEntries = new ArrayList<>(totalesPorDia.entrySet());
+            sortedEntries.sort(Map.Entry.comparingByKey());
 
             // Crear la lista de resultados en el formato [dd-MM, total]
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM");
