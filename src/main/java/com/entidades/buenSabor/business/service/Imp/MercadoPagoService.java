@@ -49,7 +49,7 @@ public class MercadoPagoService {
 
             // URLs de redirección
             PreferenceBackUrlsRequest backUrls = PreferenceBackUrlsRequest.builder()
-                    .success("http://localhost:5174/")
+                    .success("http://localhost:5174/pedido?detalles=true")
                     .failure("http://localhost:5174/pedido")
                     .pending("http://localhost:5174/pedido")
                     .build();
