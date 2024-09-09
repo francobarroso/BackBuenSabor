@@ -218,7 +218,7 @@ public class CategoriaServiceImp extends BaseServiceImp<Categoria, Long> impleme
         if(categoria.getCategoriaPadre() != null){
             categoria.setCategoriaPadre(null);
         }
-        baseRepository.delete(categoria);
+
         if (!categoria.getSubCategorias().isEmpty()){
             //Quita relacion con sucursal
             for(Sucursal sucursal : categoria.getSucursales() ){
@@ -227,5 +227,6 @@ public class CategoriaServiceImp extends BaseServiceImp<Categoria, Long> impleme
             for (Categoria subcategoria: categoria.getSubCategorias())
                 eliminarSubcategorias(subcategoria);
         }
+        baseRepository.delete(categoria);
     }
 }

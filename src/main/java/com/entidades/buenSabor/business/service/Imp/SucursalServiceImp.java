@@ -14,6 +14,15 @@ import java.util.List;
 public class SucursalServiceImp extends BaseServiceImp<Sucursal,Long> implements SucursalService {
     @Autowired
     private SucursalRepository sucursalRepository;
+
+    @Override
+    public Sucursal update(Sucursal request, Long id) {
+        Sucursal sucursal = this.sucursalRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("La sucursal id: " + id + " no existe."));
+        request.setCategorias(sucursal.getCategorias());
+        return super.update(request, id);
+    }
+
     public List<Sucursal> sucursalByEmpresaId(Long idEmpresa){
         return this.sucursalRepository.findAllByEmpresaId(idEmpresa);
     }

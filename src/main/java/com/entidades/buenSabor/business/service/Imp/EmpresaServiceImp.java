@@ -27,8 +27,14 @@ public class EmpresaServiceImp extends BaseServiceImp<Empresa,Long> implements E
         sucursal.setEmpresa(empresa);
         this.sucursalService.update(sucursal,idSucursal);
         return empresa;
+    }
 
-        
+    @Override
+    public Empresa update(Empresa request, Long id) {
+        Empresa empresa = this.empresaRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("La empresa id: " + id + " no existe."));
+        request.setSucursales(empresa.getSucursales());
+        return super.update(request, id);
     }
 
     @Override
