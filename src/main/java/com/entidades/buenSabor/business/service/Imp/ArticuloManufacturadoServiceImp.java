@@ -199,8 +199,10 @@ public class ArticuloManufacturadoServiceImp extends BaseServiceImp<ArticuloManu
         // Guardar o mantener detalles nuevos
         for (ArticuloManufacturadoDetalle detalleNuevo : detallesNuevos) {
             if (detalleNuevo.getId() > 0) {
-                Optional<ArticuloManufacturadoDetalle> detalleBd = articuloManufacturadoDetalleRepository.findById(detalleNuevo.getId());
-                detalleBd.ifPresent(detallesPersistidos::add);
+                ArticuloManufacturadoDetalle detalleBd = articuloManufacturadoDetalleRepository.findById(detalleNuevo.getId())
+                        .orElseThrow(() -> new RuntimeException("Detalle de manufacturado con id " + detalleNuevo.getId() + " no existe."));
+                detalleBd.setCantidad(detalleNuevo.getCantidad());
+                detallesPersistidos.add(detalleBd);
             } else {
                 ArticuloManufacturadoDetalle savedDetalle = articuloManufacturadoDetalleRepository.save(detalleNuevo);
                 detallesPersistidos.add(savedDetalle);
