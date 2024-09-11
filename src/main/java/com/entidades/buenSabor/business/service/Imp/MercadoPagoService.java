@@ -13,6 +13,7 @@ import com.mercadopago.exceptions.MPApiException;
 import com.mercadopago.exceptions.MPException;
 import com.mercadopago.resources.preference.Preference;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -24,6 +25,9 @@ public class MercadoPagoService {
 
     @Autowired
     private PedidoRepository pedidoRepository;
+
+    @Value("${mp.url}")
+    private String mpUrl;
 
     public PreferenceMp getPreferenciaIdMercadoPago(PedidoDto pedidoDto) {
         Pedido pedido = pedidoRepository.findLastPedido();
@@ -49,9 +53,9 @@ public class MercadoPagoService {
 
             // URLs de redirección
             PreferenceBackUrlsRequest backUrls = PreferenceBackUrlsRequest.builder()
-                    .success("http://localhost:5174/pedido?detalles=true")
-                    .failure("http://localhost:5174/pedido")
-                    .pending("http://localhost:5174/pedido")
+                    .success(mpUrl + "/pedido?detalles=true")
+                    .failure(mpUrl + "/pedido")
+                    .pending(mpUrl + "/pedido")
                     .build();
 
             // Crear la solicitud de preferencia
